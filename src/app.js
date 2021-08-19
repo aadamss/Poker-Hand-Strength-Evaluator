@@ -30,7 +30,7 @@ const CombinationValues = {
   flush: 600,
   fullHouse: 700,
   fourOfAKind: 800,
-  straightFlugh: 900,
+  straightFlush: 900,
 };
 
 rl.on('line', function (line) {
@@ -38,17 +38,6 @@ rl.on('line', function (line) {
   console.log(allPlayersCards);
 
   const getValueAndCombinationTexasHoldem = (baseCards, playerCards) => {
-    const combination = {
-      straight_flush: false,
-      quads: false,
-      full_house: false,
-      flush: false,
-      straight: false,
-      trips: false,
-      two_pairs: false,
-      pair: false,
-      high_card: true,
-    };
     return {
       combination: combination,
       value: value,
@@ -56,17 +45,6 @@ rl.on('line', function (line) {
   };
 
   const getValueAndCombinationOmahaHolden = (baseCards, playerCards) => {
-    const combination = {
-      straight_flush: false,
-      quads: false,
-      full_house: false,
-      flush: false,
-      straight: false,
-      trips: false,
-      two_pairs: false,
-      pair: false,
-      high_card: true,
-    };
     return {
       combination: combination,
       value: value,
@@ -74,17 +52,6 @@ rl.on('line', function (line) {
   };
 
   const getValueAndCombinationFiveCardDraw = (baseCards, playerCards) => {
-    const combination = {
-      straight_flush: false,
-      quads: false,
-      full_house: false,
-      flush: false,
-      straight: false,
-      trips: false,
-      two_pairs: false,
-      pair: false,
-      high_card: true,
-    };
     return {
       combination: combination,
       value: value,
