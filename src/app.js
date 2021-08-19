@@ -1,5 +1,5 @@
-import createInterface from 'readline';
-let rl = createInterface({
+import readline from 'readline';
+let rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
   terminal: false,
@@ -35,7 +35,7 @@ const CombinationValues = {
 
 rl.on('line', function (line) {
   const [gameType, baseCards, ...allPlayersCards] = line.split(' ');
-  console.log(line, baseCards, allPlayersCards);
+  console.log(allPlayersCards);
 
   const getValueAndCombinationTexasHoldem = (baseCards, playerCards) => {
     const combination = {
@@ -93,11 +93,11 @@ rl.on('line', function (line) {
 
   const result = allPlayersCards
     .map((onePlayerCards) => {
-      if (gameTyype === 'texas-holdem')
+      if (gameType === 'texas-holdem')
         return getValueAndCombinationTexasHoldem(baseCards, onePlayerCards);
-      if (gameTyype === 'omaha-holdem')
+      if (gameType === 'omaha-holdem')
         return getValueAndCombinationOmahaHolden(baseCards, onePlayerCards);
-      if (gameTyype === 'five-card-draw')
+      if (gameType === 'five-card-draw')
         return getValueAndCombinationFiveCardDraw(baseCards, onePlayerCards);
     })
     .sort((a, b) => {
