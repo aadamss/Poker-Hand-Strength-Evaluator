@@ -7,7 +7,7 @@ let rl = readline.createInterface({
 });
 
 const CardValues = {
-  // using a binary map representation to determine value for every card
+  // Using a binary map representation to determine value for every card
   2: 2,
   3: 4,
   4: 8,
@@ -24,7 +24,7 @@ const CardValues = {
 };
 
 const CombinationValues = {
-  // adding a value to every combination/hand
+  // Adding a value to every combination/hand
   highCard: 1000000000,
   pair: 2000000000,
   twoPairs: 3000000000,
@@ -66,12 +66,114 @@ const getPair = (cards) => {
   }
   return null;
 };
-const getTwoPairs = () => {};
-const getThreeOfAKind = () => {};
+const getTwoPairs = (cards) => {
+  const sortedCardsByValue = cards
+    .map((cardWithSuite) => {
+      const cardNameOnly = cardWithSuite.split('')[0];
+      return { card: cardWithSuite, value: CardValues[cardNameOnly] };
+    })
+    .sort((a, b) => {
+      return a.value < b.value ? 1 : -1;
+    });
+  for (
+    let i = 0, j = 0;
+    i < sortedCardsByValue.length - 1 && j < sortedCardsByValue.length - 1;
+    i++, j++
+  ) {
+    if (
+      sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value &&
+      sortedCardsByValue[j].value === sortedCardsByValue[j + 1].value
+    ) {
+      return [
+        sortedCardsByValue[i].card,
+        sortedCardsByValue[i + 1].card,
+        sortedCardsByValue[j].card,
+        sortedCardsByValue[j + 1].card,
+      ];
+    }
+  }
+  return null;
+};
+const getThreeOfAKind = (cards) => {
+  const sortedCardsByValue = cards
+    .map((cardWithSuite) => {
+      const cardNameOnly = cardWithSuite.split('')[0];
+      return { card: cardWithSuite, value: CardValues[cardNameOnly] };
+    })
+    .sort((a, b) => {
+      return a.value < b.value ? 1 : -1;
+    });
+  for (let i = 0; i < sortedCardsByValue.length - 1; i++) {
+    if (
+      sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value &&
+      sortedCardsByValue[i + 1].value === sortedCardsByValue[i + 2].value
+    ) {
+      return [
+        sortedCardsByValue[i].card,
+        sortedCardsByValue[i + 1].card,
+        sortedCardsByValue[i + 2].card,
+      ];
+    }
+  }
+  return null;
+};
 const getStraight = () => {};
 const getFlush = () => {};
-const getFullHouse = () => {};
-const getFourOfAKind = () => {};
+const getFullHouse = (cards) => {
+  const sortedCardsByValue = cards
+    .map((cardWithSuite) => {
+      const cardNameOnly = cardWithSuite.split('')[0];
+      return { card: cardWithSuite, value: CardValues[cardNameOnly] };
+    })
+    .sort((a, b) => {
+      return a.value < b.value ? 1 : -1;
+    });
+  for (
+    let i = 0, j = 0;
+    i < sortedCardsByValue.length - 1 && j < sortedCardsByValue.length - 1;
+    i++, j++
+  ) {
+    if (
+      sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value &&
+      sortedCardsByValue[i + 1].value === sortedCardsByValue[i + 2].value &&
+      sortedCardsByValue[j].value === sortedCardsByValue[j + 1].value
+    ) {
+      return [
+        sortedCardsByValue[i].card,
+        sortedCardsByValue[i + 1].card,
+        sortedCardsByValue[i + 2].card,
+        sortedCardsByValue[j].card,
+        sortedCardsByValue[j + 1].card,
+      ];
+    }
+  }
+  return null;
+};
+const getFourOfAKind = (cards) => {
+  const sortedCardsByValue = cards
+    .map((cardWithSuite) => {
+      const cardNameOnly = cardWithSuite.split('')[0];
+      return { card: cardWithSuite, value: CardValues[cardNameOnly] };
+    })
+    .sort((a, b) => {
+      return a.value < b.value ? 1 : -1;
+    });
+  for (let i = 0; i < sortedCardsByValue.length - 1; i++) {
+    if (
+      sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value &&
+      sortedCardsByValue[i + 1].value === sortedCardsByValue[i + 2].value &&
+      sortedCardsByValue[i + 2].value === sortedCardsByValue[i + 3].value
+    ) {
+      return [
+        sortedCardsByValue[i].card,
+        sortedCardsByValue[i + 1].card,
+        sortedCardsByValue[i + 2].card,
+        sortedCardsByValue[i + 3].card,
+      ];
+    }
+  }
+  return null;
+};
 const getStraightFlush = () => {};
 
 // Retrieve the values of the cards
