@@ -41,14 +41,14 @@ const CombinationValues = {
 const getHighCard = (cards) => {
   const sortedCardsByValue = cards
     .map((cardWithSuite) => {
-      const cardNameOnly = cardWithSuite.split('')[0]; // Get card name. Ks => K
-      return { card: cardWithSuite, value: CardValues[cardNameOnly] }; // return object { card: 'Ks', value: 123 }
+      const cardNameOnly = cardWithSuite.split('')[0];
+      return { card: cardWithSuite, value: CardValues[cardNameOnly] };
     })
     .sort((a, b) => {
       return a.value < b.value ? 1 : -1;
-    }); // sort by value
+    });
 
-  return sortedCardsByValue[0].card; // return only name
+  return sortedCardsByValue[0].card;
 };
 const getPair = (cards) => {
   const sortedCardsByValue = cards
@@ -58,7 +58,7 @@ const getPair = (cards) => {
     })
     .sort((a, b) => {
       return a.value < b.value ? 1 : -1;
-    }); // sort by value
+    });
   for (let i = 0; i < sortedCardsByValue.length - 1; i++) {
     if (sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value) {
       return [sortedCardsByValue[i].card, sortedCardsByValue[i + 1].card];
