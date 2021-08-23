@@ -117,7 +117,33 @@ const getThreeOfAKind = (cards) => {
   }
   return null;
 };
-const getStraight = () => {};
+const getStraight = (cards) => {
+  const sortedCardsByValue = cards
+    .map((cardWithSuite) => {
+      const cardNameOnly = cardWithSuite.split('')[0];
+      return { card: cardWithSuite, value: CardValues[cardNameOnly] };
+    })
+    .sort((a, b) => {
+      return a.value < b.value ? 1 : -1;
+    });
+  for (let i = 0; i < sortedCardsByValue.length - 3; i++) {
+    if (
+      sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value - 1 &&
+      sortedCardsByValue[i + 1].value === sortedCardsByValue[i + 2].value - 1 &&
+      sortedCardsByValue[i + 2].value === sortedCardsByValue[i + 3].value - 1 &&
+      sortedCardsByValue[i + 3].value === sortedCardsByValue[i + 4].value - 1
+    ) {
+      return [
+        sortedCardsByValue[i].card,
+        sortedCardsByValue[i + 1].card,
+        sortedCardsByValue[i + 2].card,
+        sortedCardsByValue[i + 3].card,
+        sortedCardsByValue[i + 4].card,
+      ];
+    }
+  }
+  return null;
+};
 const getFlush = () => {};
 const getFullHouse = (cards) => {
   const sortedCardsByValue = cards
@@ -264,7 +290,7 @@ rl.on('line', function (line) {
     }
   };
 
-  // Retrieves the result and sorts the combinations accordin to the rules of the task
+  // Retrieves the result and sorts the combinations according to the rules of the task
   const result = allPlayersCards
     .map((onePlayerCards) => {
       return getValueAndCombination(baseCards, onePlayerCards);
