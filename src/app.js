@@ -75,21 +75,21 @@ const getTwoPairs = (cards) => {
     .sort((a, b) => {
       return a.value < b.value ? 1 : -1;
     });
-  for (
-    let i = 0, j = 0;
-    i < sortedCardsByValue.length - 1 && j < sortedCardsByValue.length - 1;
-    i++, j++
-  ) {
-    if (
-      sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value &&
-      sortedCardsByValue[j].value === sortedCardsByValue[j + 1].value
-    ) {
-      return [
-        sortedCardsByValue[i].card,
-        sortedCardsByValue[i + 1].card,
-        sortedCardsByValue[j].card,
-        sortedCardsByValue[j + 1].card,
-      ];
+  let firstPair = undefined;
+  for (let i = 0; i < sortedCardsByValue.length - 1; i++) {
+    if (sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value) {
+      if (firstPair === undefined) {
+        firstPair = [
+          sortedCardsByValue[i].card,
+          sortedCardsByValue[i + 1].card,
+        ];
+        i++;
+      } else
+        return [
+          ...firstPair,
+          sortedCardsByValue[i].card,
+          sortedCardsByValue[i + 1].card,
+        ];
     }
   }
   return null;
@@ -144,7 +144,64 @@ const getStraight = (cards) => {
   }
   return null;
 };
-const getFlush = () => {};
+const getFlush = (cards) => {
+  const sortedCardsByValue = cards
+    .map((cardWithSuite) => {
+      const [cardNameOnly, cardSuite] = cardWithSuite.split('');
+      return {
+        card: cardWithSuite,
+        suite: cardSuite,
+        value: CardValues[cardNameOnly],
+      };
+    })
+    .sort((a, b) => {
+      return a.value < b.value ? 1 : -1;
+    });
+  const cardsWithS = sortedCardsByValue.filter((card) => card.suite === 's');
+  const cardsWithH = sortedCardsByValue.filter((card) => card.suite === 'h');
+  const cardsWithD = sortedCardsByValue.filter((card) => card.suite === 'd');
+  const cardsWithC = sortedCardsByValue.filter((card) => card.suite === 'c');
+  console.log(cardsWithC, cardsWithH, cardsWithD, cardsWithS);
+
+  if (cardsWithS.length >= 5) {
+    return [
+      cardsWithS[0],
+      cardsWithS[1],
+      cardsWithS[2],
+      cardsWithS[3],
+      cardsWithS[4],
+    ];
+  }
+  if (cardsWithH.length >= 5) {
+    return [
+      cardsWithH[0],
+      cardsWithH[1],
+      cardsWithH[2],
+      cardsWithH[3],
+      cardsWithH[4],
+    ];
+  }
+  if (cardsWithD.length >= 5) {
+    return [
+      cardsWithD[0].card,
+      cardsWithD[1].card,
+      cardsWithD[2].card,
+      cardsWithD[3].card,
+      cardsWithD[4].card,
+    ];
+  }
+  if (cardsWithC.length >= 5) {
+    return [
+      cardsWithC[0],
+      cardsWithC[1],
+      cardsWithC[2],
+      cardsWithC[3],
+      cardsWithC[4],
+    ];
+  }
+
+  return null;
+};
 const getFullHouse = (cards) => {
   const sortedCardsByValue = cards
     .map((cardWithSuite) => {
@@ -154,23 +211,32 @@ const getFullHouse = (cards) => {
     .sort((a, b) => {
       return a.value < b.value ? 1 : -1;
     });
-  for (
-    let i = 0, j = 0;
-    i < sortedCardsByValue.length - 1 && j < sortedCardsByValue.length - 1;
-    i++, j++
-  ) {
+  let firstTwo = undefined;
+  let firstThree = undefined;
+  for (let i = 0; i < sortedCardsByValue.length - 1; i++) {
     if (
+      firstThree === undefined &&
       sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value &&
-      sortedCardsByValue[i + 1].value === sortedCardsByValue[i + 2].value &&
-      sortedCardsByValue[j].value === sortedCardsByValue[j + 1].value
+      sortedCardsByValue[i + 1].value === sortedCardsByValue[i + 2].value
     ) {
-      return [
+      firstThree = [
         sortedCardsByValue[i].card,
         sortedCardsByValue[i + 1].card,
         sortedCardsByValue[i + 2].card,
-        sortedCardsByValue[j].card,
-        sortedCardsByValue[j + 1].card,
       ];
+      i += 2;
+      continue;
+    }
+
+    if (
+      firstTwo === undefined &&
+      sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value
+    ) {
+      firstTwo = [sortedCardsByValue[i].card, sortedCardsByValue[i + 1].card];
+      i++;
+    }
+    if (firstThree && firstTwo) {
+      return [...firstThree, ...firstTwo];
     }
   }
   return null;
