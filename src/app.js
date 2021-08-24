@@ -265,7 +265,15 @@ const getFourOfAKind = (cards) => {
   }
   return null;
 };
-const getStraightFlush = () => {};
+const getStraightFlush = (cards) => {
+  const isFlash = getFlush(cards);
+  const isStraight = getStraight(cards);
+
+  if (isFlash && isStraight) {
+    return isFlash;
+  }
+  return null;
+};
 
 // Retrieve the values of the cards
 const getCardValues = (cards) => {
@@ -281,8 +289,37 @@ const getCardValues = (cards) => {
   return cardValueSum;
 };
 
+// Error checks as well as check for what game type is provided
 rl.on('line', function (line) {
-  const [gameType, baseCards, ...allPlayersCards] = line.split(' ');
+  let [gameType, baseCards, ...allPlayersCards] = line.split(' ');
+  if (!['texas-holdem', 'omaha-holdem', 'five-card-draw'].includes(gameType)) {
+    return console.log('Error: Sorry, invalid game type');
+  }
+  if (gameType === 'texas-holdem') {
+    const isValid = allPlayersCards.every((cards) => cards.length === 4);
+    if (!isValid) {
+      return console.log(`Error: The solution doesn't support Texas Hold'em`);
+    }
+  }
+  if (gameType === 'omaha-holdem') {
+    const isValid = allPlayersCards.every((cards) => cards.length === 8);
+    if (!isValid) {
+      return console.log(`Error: The solution doesn't support Omaha Hold'em`);
+    }
+  }
+  if (gameType === 'five-card-draw') {
+    const isValid = allPlayersCards.every((cards) => cards.length === 10);
+    if (!isValid) {
+      return console.log(`Error: The solution doesn't support Five Card Draw`);
+    }
+  }
+  if (line.split(' ').length < 3) {
+    return console.log('Error: Invalid input');
+  }
+  if (gameType === 'five-card-draw') {
+    allPlayersCards.unshift(baseCards);
+    baseCards = '';
+  }
 
   // Retrieves the value and combination for all the poker combinations/hands
   const getValueAndCombination = (baseCards, playerCards) => {
