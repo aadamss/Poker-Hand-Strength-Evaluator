@@ -16,7 +16,7 @@ const CardValues = {
   7: 64,
   8: 128,
   9: 256,
-  10: 512,
+  T: 512,
   J: 1024,
   Q: 2048,
   K: 4096,
@@ -48,7 +48,7 @@ const getHighCard = (cards) => {
       return a.value < b.value ? 1 : -1;
     });
 
-  return sortedCardsByValue[0].card;
+  return [sortedCardsByValue[0].card];
 };
 const getPair = (cards) => {
   const sortedCardsByValue = cards
@@ -59,7 +59,7 @@ const getPair = (cards) => {
     .sort((a, b) => {
       return a.value < b.value ? 1 : -1;
     });
-  for (let i = 0; i < sortedCardsByValue.length - 1; i++) {
+  for (let i = 0; i < sortedCardsByValue.length - 2; i++) {
     if (sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value) {
       return [sortedCardsByValue[i].card, sortedCardsByValue[i + 1].card];
     }
@@ -76,7 +76,7 @@ const getTwoPairs = (cards) => {
       return a.value < b.value ? 1 : -1;
     });
   let firstPair = undefined;
-  for (let i = 0; i < sortedCardsByValue.length - 1; i++) {
+  for (let i = 0; i < sortedCardsByValue.length - 2; i++) {
     if (sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value) {
       if (firstPair === undefined) {
         firstPair = [
@@ -103,7 +103,7 @@ const getThreeOfAKind = (cards) => {
     .sort((a, b) => {
       return a.value < b.value ? 1 : -1;
     });
-  for (let i = 0; i < sortedCardsByValue.length - 1; i++) {
+  for (let i = 0; i < sortedCardsByValue.length - 3; i++) {
     if (
       sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value &&
       sortedCardsByValue[i + 1].value === sortedCardsByValue[i + 2].value
@@ -126,7 +126,7 @@ const getStraight = (cards) => {
     .sort((a, b) => {
       return a.value < b.value ? 1 : -1;
     });
-  for (let i = 0; i < sortedCardsByValue.length - 3; i++) {
+  for (let i = 0; i < sortedCardsByValue.length - 5; i++) {
     if (
       sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value - 1 &&
       sortedCardsByValue[i + 1].value === sortedCardsByValue[i + 2].value - 1 &&
@@ -161,24 +161,23 @@ const getFlush = (cards) => {
   const cardsWithH = sortedCardsByValue.filter((card) => card.suite === 'h');
   const cardsWithD = sortedCardsByValue.filter((card) => card.suite === 'd');
   const cardsWithC = sortedCardsByValue.filter((card) => card.suite === 'c');
-  console.log(cardsWithC, cardsWithH, cardsWithD, cardsWithS);
 
   if (cardsWithS.length >= 5) {
     return [
-      cardsWithS[0],
-      cardsWithS[1],
-      cardsWithS[2],
-      cardsWithS[3],
-      cardsWithS[4],
+      cardsWithS[0].card,
+      cardsWithS[1].card,
+      cardsWithS[2].card,
+      cardsWithS[3].card,
+      cardsWithS[4].card,
     ];
   }
   if (cardsWithH.length >= 5) {
     return [
-      cardsWithH[0],
-      cardsWithH[1],
-      cardsWithH[2],
-      cardsWithH[3],
-      cardsWithH[4],
+      cardsWithH[0].card,
+      cardsWithH[1].card,
+      cardsWithH[2].card,
+      cardsWithH[3].card,
+      cardsWithH[4].card,
     ];
   }
   if (cardsWithD.length >= 5) {
@@ -192,11 +191,11 @@ const getFlush = (cards) => {
   }
   if (cardsWithC.length >= 5) {
     return [
-      cardsWithC[0],
-      cardsWithC[1],
-      cardsWithC[2],
-      cardsWithC[3],
-      cardsWithC[4],
+      cardsWithC[0].card,
+      cardsWithC[1].card,
+      cardsWithC[2].card,
+      cardsWithC[3].card,
+      cardsWithC[4].card,
     ];
   }
 
@@ -213,7 +212,7 @@ const getFullHouse = (cards) => {
     });
   let firstTwo = undefined;
   let firstThree = undefined;
-  for (let i = 0; i < sortedCardsByValue.length - 1; i++) {
+  for (let i = 0; i < sortedCardsByValue.length - 3; i++) {
     if (
       firstThree === undefined &&
       sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value &&
@@ -250,7 +249,7 @@ const getFourOfAKind = (cards) => {
     .sort((a, b) => {
       return a.value < b.value ? 1 : -1;
     });
-  for (let i = 0; i < sortedCardsByValue.length - 1; i++) {
+  for (let i = 0; i < sortedCardsByValue.length - 4; i++) {
     if (
       sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value &&
       sortedCardsByValue[i + 1].value === sortedCardsByValue[i + 2].value &&
@@ -288,69 +287,69 @@ rl.on('line', function (line) {
   // Retrieves the value and combination for all the poker combinations/hands
   const getValueAndCombination = (baseCards, playerCards) => {
     const baseAndPlayer = (baseCards + playerCards)
-      .split(/([a-zA-Z]{2})/)
+      .split(/([a-zA-Z0-9]{2})/)
       .filter((el) => el);
 
     const straightFlush = getStraightFlush(baseAndPlayer);
     if (straightFlush) {
       return {
-        combination: straightFlush,
+        combination: playerCards,
         value: CombinationValues.straightFlush + getCardValues(straightFlush),
       };
     }
     const fourOfAKind = getFourOfAKind(baseAndPlayer);
     if (fourOfAKind) {
       return {
-        combination: fourOfAKind,
+        combination: playerCards,
         value: CombinationValues.fourOfAKind + getCardValues(fourOfAKind),
       };
     }
     const fullHouse = getFullHouse(baseAndPlayer);
     if (fullHouse) {
       return {
-        combination: fullHouse,
+        combination: playerCards,
         value: CombinationValues.fullHouse + getCardValues(fullHouse),
       };
     }
     const flush = getFlush(baseAndPlayer);
     if (flush) {
       return {
-        combination: flush,
+        combination: playerCards,
         value: CombinationValues.flush + getCardValues(flush),
       };
     }
     const straight = getStraight(baseAndPlayer);
     if (straight) {
       return {
-        combination: straight,
+        combination: playerCards,
         value: CombinationValues.straight + getCardValues(straight),
       };
     }
     const threeOfAKind = getThreeOfAKind(baseAndPlayer);
     if (threeOfAKind) {
       return {
-        combination: threeOfAKind,
+        combination: playerCards,
         value: CombinationValues.threeOfAKind + getCardValues(threeOfAKind),
       };
     }
     const twoPairs = getTwoPairs(baseAndPlayer);
     if (twoPairs) {
       return {
-        combination: twoPairs,
+        combination: playerCards,
         value: CombinationValues.twoPairs + getCardValues(twoPairs),
       };
     }
     const pair = getPair(baseAndPlayer);
     if (pair) {
       return {
-        combination: pair,
+        combination: playerCards,
         value: CombinationValues.pair + getCardValues(pair),
       };
     }
     const highCard = getHighCard(baseAndPlayer);
     if (highCard) {
       return {
-        combination: highCard,
+        combination: playerCards,
         value: CombinationValues.highCard + getCardValues(highCard),
       };
     }
@@ -362,22 +361,14 @@ rl.on('line', function (line) {
       return getValueAndCombination(baseCards, onePlayerCards);
     })
     .sort((a, b) => {
-      if (a.value === b.value) {
-        return a.combination > b.combination ? 1 : -1;
-      }
-      return a.value > b.value;
-    })
-    .forEach((result, index, arr) => {
-      if (index === 0) {
-        return console.log(result.combination);
-      }
-
-      if (arr[index - 1].value === result) {
-        console.log('=');
-      } else {
-        console.log(' ');
-      }
-
-      console.log(result.combination);
+      return b.value - a.value;
     });
+  let oneLine = '';
+  for (let i = 0; i < result.length - 1; i++) {
+    oneLine += result[i].combination;
+    oneLine += result[i].value === result[i + 1].value ? '=' : ' ';
+  }
+  oneLine += result[result.length - 1].combination;
+
+  console.log(oneLine);
 });
