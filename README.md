@@ -10,8 +10,9 @@ All `three` game types are supported.\
 
 ### Building and running
 
-Prequesites needed are in the `prepare.sh` shell script.\
-Running is inside the `run.sh` shell script.
+To install the needed prequesites run the `./prepare.sh` shell script.\
+To run the program with a given txt file run the `./run.sh` shell script with an input file:\
+`./run.sh < yourfile.txt`
 
 ### Limitations
 
