@@ -124,28 +124,21 @@ const getStraight = (cards) => {
       return { card: cardWithSuite, value: CardValues[cardNameOnly] };
     })
     .sort((a, b) => {
-      return a.value < b.value ? 1 : -1;
+      return a.value < b.value ? -1 : 1;
     });
-  for (let i = sortedCardsByValue.length - 2; i < 0; i--) {
+  for (let i = sortedCardsByValue.length - 2; i >= 0; i--) {
     if (sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value) {
       sortedCardsByValue.splice(i + 1, 1);
     }
   }
-  for (let i = 0; i < sortedCardsByValue.length - 5; i++) {
-    if (
-      sortedCardsByValue[i].value === sortedCardsByValue[i + 1].value - 1 &&
-      sortedCardsByValue[i + 1].value === sortedCardsByValue[i + 2].value - 1 &&
-      sortedCardsByValue[i + 2].value === sortedCardsByValue[i + 3].value - 1 &&
-      sortedCardsByValue[i + 3].value === sortedCardsByValue[i + 4].value - 1
-    ) {
-      return [
-        sortedCardsByValue[i].card,
-        sortedCardsByValue[i + 1].card,
-        sortedCardsByValue[i + 2].card,
-        sortedCardsByValue[i + 3].card,
-        sortedCardsByValue[i + 4].card,
-      ];
+  for (let i = sortedCardsByValue.length - 1; i >= 4; i--) {
+    const firstCardValue = sortedCardsByValue[i].value;
+    let straigthCount = 1;
+    for (let j = 1; j < 5; j++) {
+      const nextCardValue = sortedCardsByValue[i - j].value;
+      if (nextCardValue === firstCardValue / Math.pow(2, j)) straigthCount++;
     }
+    if (straigthCount === 5) return cards;
   }
   return null;
 };
