@@ -266,12 +266,96 @@ const getFourOfAKind = (cards) => {
   return null;
 };
 const getStraightFlush = (cards) => {
-  const isFlash = getFlush(cards);
-  const isStraight = getStraight(cards);
+  const sortedCardsByValue = cards
+    .map((cardWithSuite) => {
+      const [cardNameOnly, cardSuite] = cardWithSuite.split('');
+      return {
+        card: cardWithSuite,
+        suite: cardSuite,
+        value: CardValues[cardNameOnly],
+      };
+    })
+    .sort((a, b) => {
+      return a.value < b.value ? 1 : -1;
+    });
+  const cardsWithS = sortedCardsByValue.filter((card) => card.suite === 's');
+  const cardsWithH = sortedCardsByValue.filter((card) => card.suite === 'h');
+  const cardsWithD = sortedCardsByValue.filter((card) => card.suite === 'd');
+  const cardsWithC = sortedCardsByValue.filter((card) => card.suite === 'c');
 
-  if (isFlash && isStraight) {
-    return isFlash;
+  if (cardsWithS.length >= 5) {
+    for (let i = 0; i < cardsWithS.length - 5; i++) {
+      if (
+        cardsWithS[i].value === cardsWithS[i + 1].value - 1 &&
+        cardsWithS[i + 1].value === cardsWithS[i + 2].value - 1 &&
+        cardsWithS[i + 2].value === cardsWithS[i + 3].value - 1 &&
+        cardsWithS[i + 3].value === cardsWithS[i + 4].value - 1
+      ) {
+        return [
+          cardsWithS[i].card,
+          cardsWithS[i + 1].card,
+          cardsWithS[i + 2].card,
+          cardsWithS[i + 3].card,
+          cardsWithS[i + 4].card,
+        ];
+      }
+    }
   }
+  if (cardsWithH.length >= 5) {
+    for (let i = 0; i < cardsWithH.length - 5; i++) {
+      if (
+        cardsWithH[i].value === cardsWithH[i + 1].value - 1 &&
+        cardsWithH[i + 1].value === cardsWithH[i + 2].value - 1 &&
+        cardsWithH[i + 2].value === cardsWithH[i + 3].value - 1 &&
+        cardsWithH[i + 3].value === cardsWithH[i + 4].value - 1
+      ) {
+        return [
+          cardsWithH[i].card,
+          cardsWithH[i + 1].card,
+          cardsWithH[i + 2].card,
+          cardsWithH[i + 3].card,
+          cardsWithH[i + 4].card,
+        ];
+      }
+    }
+  }
+  if (cardsWithD.length >= 5) {
+    for (let i = 0; i < cardsWithD.length - 5; i++) {
+      if (
+        cardsWithD[i].value === cardsWithD[i + 1].value - 1 &&
+        cardsWithD[i + 1].value === cardsWithD[i + 2].value - 1 &&
+        cardsWithD[i + 2].value === cardsWithD[i + 3].value - 1 &&
+        cardsWithD[i + 3].value === cardsWithD[i + 4].value - 1
+      ) {
+        return [
+          cardsWithD[i].card,
+          cardsWithD[i + 1].card,
+          cardsWithD[i + 2].card,
+          cardsWithD[i + 3].card,
+          cardsWithD[i + 4].card,
+        ];
+      }
+    }
+  }
+  if (cardsWithC.length >= 5) {
+    for (let i = 0; i < cardsWithC.length - 5; i++) {
+      if (
+        cardsWithC[i].value === cardsWithC[i + 1].value - 1 &&
+        cardsWithC[i + 1].value === cardsWithC[i + 2].value - 1 &&
+        cardsWithC[i + 2].value === cardsWithC[i + 3].value - 1 &&
+        cardsWithC[i + 3].value === cardsWithC[i + 4].value - 1
+      ) {
+        return [
+          cardsWithC[i].card,
+          cardsWithC[i + 1].card,
+          cardsWithC[i + 2].card,
+          cardsWithC[i + 3].card,
+          cardsWithC[i + 4].card,
+        ];
+      }
+    }
+  }
+
   return null;
 };
 
