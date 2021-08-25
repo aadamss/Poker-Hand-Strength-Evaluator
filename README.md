@@ -10,9 +10,11 @@ All `three` game types are supported.\
 
 ### Building and running
 
+Make sure that you are in the correct foler level to reach the `.sh` files.\
 To install the needed prequesites run the `./prepare.sh` shell script.\
 To run the program with a given txt file run the `./run.sh` shell script with an input file:\
-`./run.sh < yourfile.txt`
+`./run.sh < test-cases.txt > solutions.txt` - this will run the script taking an input file provided by you and\
+will generate an output text file with the name of your choice with the solutions.\
 
 ### Limitations
 
